@@ -1,127 +1,130 @@
-# Squad BMAD: Trợ Lý Ảo Điều Phối Dự Án Tự Động Với Gemini & Claude Code
+# Squad BMAD: Automated Project Orchestration Assistant with Gemini & Claude Code
 
-Chào mừng bạn đến với **Squad BMAD** – một boilerplate/giải pháp thiết kế để biến **Gemini CLI** trở thành một **Project Manager & Principal Tech Lead** thực thụ. Bằng cách kết hợp sức mạnh điều phối của Gemini và khả năng lập trình/suy luận xuất sắc của **Claude Code** thông qua môi trường **Tmux**, dự án này tự động hóa và tối ưu hóa luồng công việc phát triển phần mềm dựa trên nền tảng phương pháp luận **BMAD**.
+*Read this in other languages: [English](README.md), [Tiếng Việt](README.vi.md).*
 
----
-
-## 🌟 Lợi Ích Đem Lại
-
-Phương pháp luận BMAD (Build-Measure-Analyze-Deploy) nổi tiếng với khả năng duy trì tính chặt chẽ, cấu trúc rõ ràng và luôn hướng tới **spec-driven** (làm việc dựa trên đặc tả kỹ thuật). Tuy nhiên, nhược điểm lớn nhất là quá trình vận hành tốn khá nhiều bước và thao tác thủ công. 
-
-**Squad BMAD giải quyết triệt để vấn đề đó:**
-- **Tự động hóa xuyên suốt:** Giúp quá trình vận hành project với phương pháp BMAD diễn ra trơn tru, liền mạch mà không cần bạn phải can thiệp vào từng bước nhỏ.
-- **Có ngay một trợ lý dự án mẫn cán:** Trợ lý này sẽ giúp bạn trả lời, xử lý các step của BMAD, tự động vận hành và implement toàn bộ Epics, Stories.
-- **Tập trung vào giá trị cốt lõi:** Bạn chỉ cần nói chuyện với Trợ lý (Gemini), đưa ra quyết định ở tầm cao, phần còn lại Trợ lý sẽ tự động giao việc và giám sát các Agent khác (Claude Code).
+Welcome to **Squad BMAD** – a boilerplate/design solution to transform **Gemini CLI** into a true **Project Manager & Principal Tech Lead**. By combining Gemini's orchestration power with **Claude Code's** excellent coding and reasoning capabilities via **Tmux**, this project automates and optimizes the software development workflow based on the **BMAD** methodology.
 
 ---
 
-## 📋 Yêu Cầu Hệ Thống (Requirements)
+## 🌟 Benefits
 
-Để vận hành trơn tru hệ thống này, bạn cần chuẩn bị:
+The BMAD (Build-Measure-Analyze-Deploy) methodology is known for maintaining strictness, clear structure, and being strongly **spec-driven**. However, its biggest drawback is that the operation process requires many steps and manual actions.
 
-- **Tài khoản Claude Code:** Cần thiết để khởi chạy các Agent thực thi (Implement) và tư duy (Brainstorm).
-- **Tài khoản Gemini (Gemini CLI):** Đóng vai trò là "Nhạc trưởng" điều phối toàn bộ luồng công việc.
-- **Môi trường Tmux:** Được cài đặt sẵn trên máy tính (MacOS/Linux) để quản lý đa luồng phiên làm việc.
-- **Kinh nghiệm:** Đã từng sử dụng hoặc có kiến thức nền tảng về phương pháp **BMAD**.
-
----
-
-## 🧠 Hệ Tư Tưởng Cốt Lõi
-
-Squad BMAD được xây dựng dựa trên các nguyên tắc bất di bất dịch:
-
-1. **Bám sát quy trình BMAD:** Mọi tác vụ từ lên ý tưởng, viết đặc tả, đến code và review đều tuân thủ nghiêm ngặt các workflow của BMAD. Điều này đảm bảo dự án luôn đi đúng hướng và tài liệu kỹ thuật luôn đồng bộ với code thực tế.
-2. **Fresh Chat & Context Isolation (Cách ly Ngữ cảnh):** Trước khi bắt đầu một workflow mới, hệ thống bắt buộc phải dọn dẹp ngữ cảnh (gọi lệnh `/clear`). Việc này giúp AI (Claude) không bị ảo giác (hallucination) do ôm đồm quá nhiều thông tin cũ, giữ cho suy luận luôn sắc bén.
-3. **Phân chia vai trò rõ ràng (Agent Roles):** Áp dụng đúng tinh thần của BMAD, hệ thống chia các Agent thành các "persona" chuyên biệt (PM, Architect, Dev, QA) để tối ưu hóa hiệu suất của từng Model AI.
+**Squad BMAD completely solves this problem:**
+- **Seamless Automation:** Makes operating a project with the BMAD method smooth and continuous without requiring your intervention in every small step.
+- **An Indefatigable Project Assistant:** This assistant will help you answer and handle BMAD steps, automatically operating and implementing all Epics and Stories.
+- **Focus on Core Value:** You only need to talk to the Assistant (Gemini), make high-level decisions, and the Assistant will automatically delegate tasks and monitor the other Agents (Claude Code).
 
 ---
 
-## ⚙️ Kiến Trúc Hệ Thống & Cách Vận Hành
+## 📋 System Requirements
 
-Hệ thống hoạt động dựa trên sự phối hợp nhịp nhàng của **3 phiên làm việc (sessions) Tmux**:
+To run this system smoothly, you need to prepare:
 
-1. **Session 1: Gemini Orchestrator (Nhạc trưởng)**
-   - Là người chủ vận hành 2 tmux còn lại.
-   - Giao tiếp trực tiếp với bạn, hiểu yêu cầu, ánh xạ vào workflow của BMAD.
-   - Theo dõi, nghiệm thu kết quả và ra quyết định chuyển tiếp.
-
-2. **Session 2: Claude Code - Implement (Thực thi)**
-   - Đóng vai trò là một **Developer**.
-   - Chuyên dùng để viết code, sửa lỗi, chạy test.
-   - Sử dụng model **Claude 3.5 Sonnet** để đảm bảo tốc độ nhanh, code giỏi và tiết kiệm chi phí.
-
-3. **Session 3: Claude Code - Brainstorm (Suy luận)**
-   - Đóng vai trò là **Architect / PM / QA**.
-   - Chuyên dùng để suy luận kiến trúc, giải quyết các bài toán phức tạp, thiết kế hệ thống và review code.
-   - Sử dụng model **Claude 3.5 Sonnet** (hoặc **Opus** tuỳ cấu hình) cho các tác vụ cần tư duy logic sâu.
-
-### 🔄 Hệ Thống Event-Driven bằng Hooks
-
-Thay vì để Gemini phải liên tục kiểm tra màn hình xem Claude Code đã làm xong chưa (polling), dự án này sử dụng cơ chế **Hooks Event-driven** thông qua file `.claude/settings.json`.
-
-Mỗi khi Claude Code (ở tmux 2 hoặc 3) hoàn thành công việc hoặc cần dừng lại, hệ thống sẽ tự động kích hoạt một bash script (như `.claude/hooks/wakeup-gemini.sh`). Script này sẽ lập tức gửi tín hiệu ngược lại cho Session Tmux của Gemini, "đánh thức" Gemini dậy để:
-1. Đọc kết quả công việc.
-2. Đánh giá và nghiệm thu mã nguồn.
-3. Báo cáo lại cho bạn hoặc tự động đi tiếp bước tiếp theo theo quy trình BMAD.
+- **Claude Code Account:** Required to launch the Execution (Implement) and Reasoning (Brainstorm) Agents.
+- **Gemini Account (Gemini CLI):** Acts as the "Orchestrator" coordinating the entire workflow.
+- **Tmux Environment:** Installed on your machine (MacOS/Linux) to manage multi-threaded work sessions.
+- **Experience:** Have used or possess a basic understanding of the **BMAD** method.
 
 ---
 
-## 🚀 Tóm Tắt Quy Trình Hoạt Động
+## 🧠 Core Philosophy
 
-1. Bạn mở 3 session Tmux (1 cho Gemini, 2 cho Claude Code).
-2. Bạn chat với Gemini: *"Hãy implement Story #123 cho tôi."*
-3. Gemini nhận lệnh, phân tích theo workflow BMAD và gửi lệnh (kèm `/clear` để reset context) sang cho `Claude Code - Implement` thông qua shell script an toàn.
-4. Gemini rơi vào trạng thái "Idle" (nghỉ ngơi), chờ đợi.
-5. `Claude Code - Implement` hì hục viết code. Khi xong, nó tự động kích hoạt Hook.
-6. Hook chạy bash script, gửi phím `Enter` và dòng thông báo sang màn hình của Gemini.
-7. Gemini "tỉnh giấc", đọc log màn hình của Claude Code, nghiệm thu kết quả và báo cáo lại cho bạn.
+Squad BMAD is built on immutable principles:
+
+1. **Strict Adherence to BMAD Processes:** All tasks from ideation, writing specifications, to coding and reviewing strictly follow BMAD's workflows. This ensures the project always stays on track and technical documentation is always synchronized with the actual code.
+2. **Fresh Chat & Context Isolation:** Before starting a new workflow, the system must clear the context (by sending the `/clear` command). This prevents the AI (Claude) from hallucinating due to carrying too much old information, keeping its reasoning sharp.
+3. **Clear Agent Roles:** Applying the true spirit of BMAD, the system divides Agents into specialized "personas" (PM, Architect, Dev, QA) to optimize the performance of each AI Model.
 
 ---
 
-Với **Squad BMAD**, bạn không còn là một coder cặm cụi gõ từng dòng lệnh, bạn là một **Người quản lý dự án** thực thụ điều hành một đội ngũ AI tinh nhuệ!
+## ⚙️ System Architecture & Operation
+
+The system operates based on the smooth coordination of **3 Tmux sessions**:
+
+1. **Session 1: Gemini Orchestrator**
+   - The master operating the other 2 tmux sessions.
+   - Communicates directly with you, understands requirements, and maps them to BMAD workflows.
+   - Monitors, accepts the results, and makes transition decisions.
+
+2. **Session 2: Claude Code - Implement**
+   - Acts as a **Developer**.
+   - Specialized in writing code, fixing bugs, and running tests.
+   - Uses the **Claude 3.5 Sonnet** model to ensure fast speed, excellent coding, and cost savings.
+
+3. **Session 3: Claude Code - Brainstorm**
+   - Acts as an **Architect / PM / QA**.
+   - Specialized in reasoning about architecture, solving complex problems, designing systems, and reviewing code.
+   - Uses the **Claude 3.5 Sonnet** (or **Opus** depending on configuration) model for tasks requiring deep logical thinking.
+
+### 🔄 Event-Driven System with Hooks
+
+Instead of Gemini having to constantly poll the screen to see if Claude Code is done, this project uses an **Event-driven Hooks** mechanism via the `.claude/settings.json` file.
+
+Whenever Claude Code (in tmux 2 or 3) completes a task or needs to stop, the system automatically triggers a bash script (like `.claude/hooks/wakeup-gemini.sh`). This script immediately sends a signal back to Gemini's Tmux Session, "waking up" Gemini to:
+1. Read the work results.
+2. Evaluate and accept the source code.
+3. Report back to you or automatically proceed to the next step according to the BMAD process.
 
 ---
 
-## 🛠 Cách Cài Đặt & Sử Dụng (How to use)
+## 🚀 Workflow Summary
 
-### 1. Chuẩn Bị Môi Trường Tmux
-Bạn cần khởi tạo 3 session Tmux riêng biệt. Bạn có thể đặt tên tuỳ ý, ví dụ:
+1. You open 3 Tmux sessions (1 for Gemini, 2 for Claude Code).
+2. You chat with Gemini: *"Please implement Story #123 for me."*
+3. Gemini receives the command, analyzes it according to the BMAD workflow, and sends the command (along with `/clear` to reset context) to `Claude Code - Implement` via a secure shell script.
+4. Gemini goes into an "Idle" state, waiting.
+5. `Claude Code - Implement` busily writes code. When done, it automatically triggers the Hook.
+6. The Hook runs the bash script, sending an `Enter` keystroke and a notification message to Gemini's screen.
+7. Gemini "wakes up", reads Claude Code's screen log, accepts the results, and reports back to you.
+
+---
+
+With **Squad BMAD**, you are no longer a coder painstakingly typing every line of code; you are a true **Project Manager** commanding an elite AI squad!
+
+---
+
+## 🛠 Setup & Usage
+
+### 1. Prepare the Tmux Environment
+You need to initialize 3 separate Tmux sessions. You can name them whatever you like, for example:
 - Session 1 (Gemini): `gemini-orchestrator`
 - Session 2 (Claude Implement): `claude-implement`
 - Session 3 (Claude Brainstorm): `claude-brainstorm`
 
-Mở 3 terminal và chạy lần lượt:
+Open 3 terminals and run consecutively:
 ```bash
 tmux new -s gemini-orchestrator
 tmux new -s claude-implement
 tmux new -s claude-brainstorm
 ```
 
-### 2. Khởi Chạy Các Tác Nhân
-- **Tại Tmux 1 (`gemini-orchestrator`)**: Khởi chạy Gemini CLI.
+### 2. Launch the Agents
+- **In Tmux 1 (`gemini-orchestrator`)**: Launch Gemini CLI.
   ```bash
   gemini
   ```
-- **Tại Tmux 2 (`claude-implement`)**: Khởi chạy Claude Code. Mặc định Claude Code sẽ dùng model Sonnet.
+- **In Tmux 2 (`claude-implement`)**: Launch Claude Code. By default, Claude Code uses the Sonnet model.
   ```bash
   claude
   ```
-- **Tại Tmux 3 (`claude-brainstorm`)**: Khởi chạy Claude Code. (Nên cấu hình dùng model Opus nếu bạn cần suy luận kiến trúc phức tạp).
+- **In Tmux 3 (`claude-brainstorm`)**: Launch Claude Code. (You should configure it to use the Opus model if you need complex architectural reasoning).
   ```bash
   claude
   ```
 
-### 3. Cấu Hình Tên Phiên Cho Gemini
-Để Gemini biết được cần gửi lệnh cho ai, trong cửa sổ chat của **Gemini (Tmux 1)**, bạn gõ slash command để cấu hình (Lưu ý thay tên session cho đúng với tên bạn đã tạo):
+### 3. Configure Session Names for Gemini
+So Gemini knows who to send commands to, in the chat window of **Gemini (Tmux 1)**, type the slash command to configure (Make sure to replace the session names with the ones you created):
 
 ```text
-/withClaudeCodeTmux "claude-implement" "claude-brainstorm"
+/withClaudeCodeTmux "claude-implement:0.0" "claude-brainstorm:0.0"
 ```
+*(Here `:0.0` is the default Window and Pane format of Tmux. You can check this by running `tmux list-panes -a`)*
 
-### 4. Bắt Đầu Công Việc
-Giờ đây hệ thống đã sẵn sàng. Bạn chỉ việc giao tiếp với Gemini như một người quản lý dự án:
-- *"Bắt đầu project này giúp tôi bằng luồng generate-project-context."*
-- *"Chúng ta đang ở Epic nào? Hãy tạo story mới cho tính năng đăng nhập."*
-- *"Hãy implement Story #5 theo quy trình dev-story."*
+### 4. Start Working
+The system is now ready. You simply communicate with Gemini like a project manager:
+- *"Start this project for me using the generate-project-context flow."*
+- *"Which Epic are we in? Create a new story for the login feature."*
+- *"Implement Story #5 according to the dev-story process."*
 
-Gemini sẽ tự động phân tích, dọn dẹp ngữ cảnh (gửi lệnh `/clear`), chuyển lệnh đến đúng session Claude phù hợp và sẽ tự động "thức dậy" để nghiệm thu khi nhận được tín hiệu Hook phản hồi từ Claude.
+Gemini will automatically analyze, clear the context (send `/clear`), route the command to the appropriate Claude session, and will automatically "wake up" to accept the work when it receives the Hook feedback signal from Claude.
