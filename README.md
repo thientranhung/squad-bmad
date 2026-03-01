@@ -106,11 +106,11 @@ tmux new -s claude-brainstorm
   ```
 - **In Tmux 2 (`claude-implement`)**: Launch Claude Code. By default, Claude Code uses the Sonnet model.
   ```bash
-  claude -p "dangerous"
+  claude --dangerously-skip-permissions
   ```
 - **In Tmux 3 (`claude-brainstorm`)**: Launch Claude Code. (You should configure it to use the Opus model if you need complex architectural reasoning).
   ```bash
-  claude -p "dangerous"
+  claude --dangerously-skip-permissions
   ```
 
 ### 3. Configure Session Names for Gemini

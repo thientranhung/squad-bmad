@@ -104,11 +104,11 @@ tmux new -s claude-brainstorm
   ```
 - **Tại Tmux 2 (`claude-implement`)**: Khởi chạy Claude Code. Mặc định Claude Code sẽ dùng model Sonnet.
   ```bash
-  claude -p "dangerous"
+  claude --dangerously-skip-permissions
   ```
 - **Tại Tmux 3 (`claude-brainstorm`)**: Khởi chạy Claude Code. (Nên cấu hình dùng model Opus nếu bạn cần suy luận kiến trúc phức tạp).
   ```bash
-  claude -p "dangerous"
+  claude --dangerously-skip-permissions
   ```
 
 ### 3. Cấu Hình Tên Phiên Cho Gemini
