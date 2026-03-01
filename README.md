@@ -102,15 +102,15 @@ tmux new -s claude-brainstorm
 ### 2. Launch the Agents
 - **In Tmux 1 (`gemini-orchestrator`)**: Launch Gemini CLI.
   ```bash
-  gemini
+  gemini --yolo
   ```
 - **In Tmux 2 (`claude-implement`)**: Launch Claude Code. By default, Claude Code uses the Sonnet model.
   ```bash
-  claude
+  claude -p "dangerous"
   ```
 - **In Tmux 3 (`claude-brainstorm`)**: Launch Claude Code. (You should configure it to use the Opus model if you need complex architectural reasoning).
   ```bash
-  claude
+  claude -p "dangerous"
   ```
 
 ### 3. Configure Session Names for Gemini

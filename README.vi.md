@@ -100,15 +100,15 @@ tmux new -s claude-brainstorm
 ### 2. Khởi Chạy Các Tác Nhân
 - **Tại Tmux 1 (`gemini-orchestrator`)**: Khởi chạy Gemini CLI.
   ```bash
-  gemini
+  gemini --yolo
   ```
 - **Tại Tmux 2 (`claude-implement`)**: Khởi chạy Claude Code. Mặc định Claude Code sẽ dùng model Sonnet.
   ```bash
-  claude
+  claude -p "dangerous"
   ```
 - **Tại Tmux 3 (`claude-brainstorm`)**: Khởi chạy Claude Code. (Nên cấu hình dùng model Opus nếu bạn cần suy luận kiến trúc phức tạp).
   ```bash
-  claude
+  claude -p "dangerous"
   ```
 
 ### 3. Cấu Hình Tên Phiên Cho Gemini
