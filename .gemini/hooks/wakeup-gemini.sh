@@ -15,8 +15,10 @@ AGENT_NAME=$(echo "$HOOK_INPUT" | jq -r '.agent // empty')
 # Example: if [ -n "$AGENT_NAME" ] && [ "$AGENT_NAME" != "root" ]; then exit 0; fi
 
 # --- Dynamic Gemini session target ---
-# Derive the tmux session name from the project folder name in the hook's cwd.
-# Convention: gemini-orchestrator-<folder-name>  (e.g. cwd=/…/squad-bmad → gemini-orchestrator-squad-bmad)
+# Derive the tmux session name from the project ROOT folder name.
+# We use `git rev-parse --show-toplevel` to resolve from any subdirectory
+# to the git root, then take its basename.
+# Convention: gemini-orchestrator-<folder-name>  (e.g. cwd=/…/squad-bmad/frontend → gemini-orchestrator-squad-bmad)
 CWD=$(echo "$HOOK_INPUT" | jq -r '.cwd // empty')
 
 if [ -z "$CWD" ]; then
@@ -24,7 +26,17 @@ if [ -z "$CWD" ]; then
   exit 0
 fi
 
-FOLDER_NAME=$(basename "$CWD")
+# Resolve to git root so subdirectories (e.g. frontend/) don't break session lookup
+GIT_ROOT=$(git -C "$CWD" rev-parse --show-toplevel 2>/dev/null || echo "")
+
+if [ -n "$GIT_ROOT" ]; then
+  FOLDER_NAME=$(basename "$GIT_ROOT")
+else
+  # Fallback: if not inside a git repo, use cwd directly
+  echo "[wakeup-gemini] Warning: '$CWD' is not inside a git repo. Falling back to basename of cwd." >&2
+  FOLDER_NAME=$(basename "$CWD")
+fi
+
 GEMINI_SESSION="gemini-orchestrator-${FOLDER_NAME}"
 
 # Check whether the target tmux session actually exists before sending

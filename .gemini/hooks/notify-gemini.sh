@@ -7,9 +7,20 @@ if [ -z "$MSG" ]; then
 fi
 
 # --- Dynamic Gemini session target ---
-# Derive the tmux session name from the current project folder.
+# Derive the tmux session name from the project ROOT folder name.
+# We use `git rev-parse --show-toplevel` to resolve from any subdirectory
+# to the git root, then take its basename.
 # Convention: gemini-orchestrator-<folder-name>
-FOLDER_NAME=$(basename "$PWD")
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+
+if [ -n "$GIT_ROOT" ]; then
+  FOLDER_NAME=$(basename "$GIT_ROOT")
+else
+  # Fallback: if not inside a git repo, use PWD directly
+  echo "[notify-gemini] Warning: not inside a git repo. Falling back to basename of PWD." >&2
+  FOLDER_NAME=$(basename "$PWD")
+fi
+
 GEMINI_SESSION="gemini-orchestrator-${FOLDER_NAME}"
 
 # Check whether the target tmux session actually exists before sending

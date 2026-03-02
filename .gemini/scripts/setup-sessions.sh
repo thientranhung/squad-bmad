@@ -21,7 +21,13 @@ set -e
 if [ -n "$1" ]; then
   FOLDER="$1"
 else
-  FOLDER=$(basename "$PWD")
+  # Use git root to resolve correctly from any subdirectory
+  GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+  if [ -n "$GIT_ROOT" ]; then
+    FOLDER=$(basename "$GIT_ROOT")
+  else
+    FOLDER=$(basename "$PWD")
+  fi
 fi
 
 # ── Derive session names ─────────────────────────────────────────────────────

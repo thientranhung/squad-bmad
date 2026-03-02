@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.4] - 2026-03-02
+
+### Fixed
+
+- **Hook & script session resolution:** `wakeup-gemini.sh`, `notify-gemini.sh`, and `setup-sessions.sh` now use `git rev-parse --show-toplevel` to derive the tmux session name from the git root folder, instead of `basename "$PWD"`. Fixes session lookup failures when Claude Code runs from a subdirectory (e.g., `project/frontend/`).
+
+### Added
+
+- **`teardown-sessions.sh`**: New script to kill all 3 project tmux sessions (`gemini-orchestrator-*`, `claude-implement-*`, `claude-brainstorm-*`) for freeing machine resources after finishing work.
+- **CLI teardown hint**: `install` and `upgrade` commands now display the teardown command in their post-run output.
+
 ## [1.2.3] - 2026-03-02
 
 ### Fixed
@@ -80,6 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `idea.md` from git tracking.
 
+[1.2.4]: https://github.com/thientranhung/squad-bmad/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/thientranhung/squad-bmad/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/thientranhung/squad-bmad/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/thientranhung/squad-bmad/compare/v1.2.0...v1.2.1
