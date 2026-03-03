@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Tmux session name sanitization:** Folder names containing `.` (dots), `:` (colons), or spaces now work correctly. These characters are tmux separators (`session.window.pane`, `session:window`) and caused session creation/lookup failures for projects like `keyconnect_smartcar_2.0_backend`. All problematic characters are replaced with underscores.
+- **Tmux session name sanitization:** Folder names containing `.` (dots), `:` (colons), or spaces now work correctly. These characters are tmux separators (`session.window.pane`, `session:window`) and caused session creation/lookup failures. All problematic characters are replaced with underscores.
 
 ### Changed
 
