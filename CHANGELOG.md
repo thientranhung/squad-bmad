@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.6] - 2026-03-03
+
+### Fixed
+
+- **Tmux session name sanitization:** Folder names containing `.` (dots), `:` (colons), or spaces now work correctly. These characters are tmux separators (`session.window.pane`, `session:window`) and caused session creation/lookup failures for projects like `keyconnect_smartcar_2.0_backend`. All problematic characters are replaced with underscores.
+
+### Changed
+
+- **Extracted `_common.sh` shared helper:** Folder resolution, sanitization, and session name derivation are now centralized in `.gemini/scripts/_common.sh` instead of being duplicated across scripts. All three scripts (`setup-sessions.sh`, `teardown-sessions.sh`, `tmux-send.sh`) source this file.
+- **`tmux-send.sh` now sanitizes session names:** Callers can pass raw folder names containing special characters; the script will sanitize them before targeting the tmux session.
+
 ## [1.2.4] - 2026-03-02
 
 ### Fixed
@@ -91,6 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `idea.md` from git tracking.
 
+[1.2.6]: https://github.com/thientranhung/squad-bmad/compare/v1.2.4...v1.2.6
 [1.2.4]: https://github.com/thientranhung/squad-bmad/compare/v1.2.3...v1.2.4
 [1.2.3]: https://github.com/thientranhung/squad-bmad/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/thientranhung/squad-bmad/compare/v1.2.1...v1.2.2

@@ -17,24 +17,14 @@
 
 set -e
 
-# ── Resolve folder name ──────────────────────────────────────────────────────
-if [ -n "$1" ]; then
-  FOLDER="$1"
-else
-  GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
-  if [ -n "$GIT_ROOT" ]; then
-    FOLDER=$(basename "$GIT_ROOT")
-  else
-    FOLDER=$(basename "$PWD")
-  fi
-fi
+# ── Load shared helpers ────────────────────────────────────────────────────
+source "$(dirname "$0")/_common.sh"
 
-# ── Derive session names ─────────────────────────────────────────────────────
-SESSION_GEMINI="gemini-orchestrator-${FOLDER}"
-SESSION_IMPLEMENT="claude-implement-${FOLDER}"
-SESSION_BRAINSTORM="claude-brainstorm-${FOLDER}"
+# ── Resolve folder & session names ─────────────────────────────────────────
+FOLDER=$(resolve_folder "$1")
+derive_session_names "$FOLDER"
 
-# ── Helper: kill session if it exists ─────────────────────────────────────────
+# ── Helper: kill session if it exists ─────────────────────────────────────
 kill_session_if_exists() {
   local session_name="$1"
   local label="$2"
@@ -47,7 +37,7 @@ kill_session_if_exists() {
   fi
 }
 
-# ── Print plan ────────────────────────────────────────────────────────────────
+# ── Print plan ────────────────────────────────────────────────────────────
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
 echo "║         squad-bmad  •  Session Teardown                     ║"
@@ -61,12 +51,12 @@ echo "    2. ${SESSION_IMPLEMENT}"
 echo "    3. ${SESSION_BRAINSTORM}"
 echo ""
 
-# ── Kill sessions ─────────────────────────────────────────────────────────────
+# ── Kill sessions ─────────────────────────────────────────────────────────
 kill_session_if_exists "$SESSION_GEMINI"    "Gemini Orchestrator"
 kill_session_if_exists "$SESSION_IMPLEMENT" "Claude Implement (Sonnet)"
 kill_session_if_exists "$SESSION_BRAINSTORM" "Claude Brainstorm (Opus)"
 
-# ── Summary ───────────────────────────────────────────────────────────────────
+# ── Summary ───────────────────────────────────────────────────────────────
 echo ""
 REMAINING=$(tmux list-sessions 2>/dev/null || true)
 if [ -n "$REMAINING" ]; then

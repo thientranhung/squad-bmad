@@ -17,25 +17,14 @@
 
 set -e
 
-# ── Resolve folder name ──────────────────────────────────────────────────────
-if [ -n "$1" ]; then
-  FOLDER="$1"
-else
-  # Use git root to resolve correctly from any subdirectory
-  GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
-  if [ -n "$GIT_ROOT" ]; then
-    FOLDER=$(basename "$GIT_ROOT")
-  else
-    FOLDER=$(basename "$PWD")
-  fi
-fi
+# ── Load shared helpers ────────────────────────────────────────────────────
+source "$(dirname "$0")/_common.sh"
 
-# ── Derive session names ─────────────────────────────────────────────────────
-SESSION_GEMINI="gemini-orchestrator-${FOLDER}"
-SESSION_IMPLEMENT="claude-implement-${FOLDER}"
-SESSION_BRAINSTORM="claude-brainstorm-${FOLDER}"
+# ── Resolve folder & session names ─────────────────────────────────────────
+FOLDER=$(resolve_folder "$1")
+derive_session_names "$FOLDER"
 
-# ── Helper: create session only if it does not already exist ─────────────────
+# ── Helper: create session only if it does not already exist ─────────────
 create_session_if_missing() {
   local session_name="$1"
   local start_cmd="$2"     # command to run inside the new session
@@ -46,7 +35,6 @@ create_session_if_missing() {
   else
     # -d  : start detached
     # -s  : session name
-    # The shell command is passed via tmux's 'new-session' so it runs immediately
     tmux new-session -d -s "$session_name" -x 220 -y 50
     # Give the shell a moment to initialise before sending the startup command
     sleep 0.5
@@ -55,7 +43,7 @@ create_session_if_missing() {
   fi
 }
 
-# ── Print plan ────────────────────────────────────────────────────────────────
+# ── Print plan ────────────────────────────────────────────────────────────
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
 echo "║         squad-bmad  •  Session Setup                        ║"

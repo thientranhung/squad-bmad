@@ -2,33 +2,40 @@
 # tmux-send.sh — Reliably send text to a tmux pane.
 #
 # USAGE:
-#   ./tmux-send.sh <pane-target> <message> [wait-seconds]
+#   ./tmux-send.sh <session-name> <message> [wait-seconds]
 #
 # ARGUMENTS:
-#   pane-target   — tmux target, e.g.: gemini-orchestrator:0.0
+#   session-name  — tmux session (will be sanitised and targeted at :0.0)
 #   message       — content to send (wrap in quotes if it contains spaces)
 #   wait-seconds  — (optional) seconds to wait between text and Enter, default: 5
 #
 # EXAMPLES:
-#   .gemini/scripts/tmux-send.sh "gemini-orchestrator:0.0" "Hello from Claude Code"
-#   .gemini/scripts/tmux-send.sh "cc-implement:0" "/dev-story" 3
+#   .gemini/scripts/tmux-send.sh "gemini-orchestrator-squad-bmad" "Hello from Claude Code"
+#   .gemini/scripts/tmux-send.sh "claude-implement-squad-bmad" "/dev-story" 3
 
 set -e
 
-PANE_TARGET="$1"
+# ── Load shared helpers ────────────────────────────────────────────────────
+source "$(dirname "$0")/_common.sh"
+
+SESSION_NAME="$1"
 MESSAGE="$2"
 WAIT_SECONDS="${3:-5}"
 
 # Validate required arguments
-if [ -z "$PANE_TARGET" ] || [ -z "$MESSAGE" ]; then
+if [ -z "$SESSION_NAME" ] || [ -z "$MESSAGE" ]; then
   echo "Error: Missing arguments." >&2
-  echo "Usage: $0 <pane-target> <message> [wait-seconds]" >&2
+  echo "Usage: $0 <session-name> <message> [wait-seconds]" >&2
   exit 1
 fi
 
-# Check that the pane exists
-if ! tmux has-session -t "$PANE_TARGET" 2>/dev/null; then
-  echo "Error: Tmux target '$PANE_TARGET' does not exist." >&2
+# Sanitise the session name (in case caller passed raw folder name inside it)
+SESSION_NAME=$(sanitize_for_tmux "$SESSION_NAME")
+PANE_TARGET="${SESSION_NAME}:0.0"
+
+# Check that the session exists
+if ! tmux has-session -t "$SESSION_NAME" 2>/dev/null; then
+  echo "Error: Tmux session '$SESSION_NAME' does not exist." >&2
   exit 1
 fi
 
@@ -41,4 +48,4 @@ sleep "$WAIT_SECONDS"
 # Send Enter (C-m) — do NOT use 'Enter' or '\n'
 tmux send-keys -t "$PANE_TARGET" C-m
 
-echo "✓ Sent to '$PANE_TARGET': $MESSAGE"
+echo "Sent to '$PANE_TARGET': $MESSAGE"
