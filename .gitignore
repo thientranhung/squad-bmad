@@ -12,3 +12,5 @@ node_modules/
 # local settings
 .gemini/settings.local.json
 .claude/settings.local.json
+CLAUDE.md
+GEMINI.md
