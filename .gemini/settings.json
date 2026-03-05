@@ -6,7 +6,7 @@
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
   "hooks": {
-    "Stop": [
+    "AfterAgent": [
       {
         "matcher": "",
         "hooks": [
@@ -23,7 +23,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .gemini/hooks/notify-gemini.sh "$CLAUDE_NOTIFICATION""
+            "command": "bash .gemini/hooks/notify-gemini.sh \"$CLAUDE_NOTIFICATION\""
           }
         ]
       }
